@@ -67,12 +67,12 @@ func init() {
 	if err := godotenv.Load(".env"); err != nil {
 		panic("Error loading .env file: " + err.Error())
 	} else {
-		println("Loaded .env file")
+		println(time.Now().Format("2006-01-02 15:04:05") + "     INFO    Successfully Loaded .env file")
 	}
 	// parse environment variables into the Config struct
 	if err := env.Parse(&Cfg); err != nil {
 		panic("Error parsing env variables: " + err.Error())
 	} else {
-		println("Parsed env variables")
+		println(time.Now().Format("2006-01-02 15:04:05") + "     INFO    Successfully Parsed env variables")
 	}
 }

@@ -1,26 +1,29 @@
 package app
 
 import (
-	"github.com/sirupsen/logrus"
 	"netsepio-gateway-v1.1/internal/caching"
 	"netsepio-gateway-v1.1/internal/database"
 	"netsepio-gateway-v1.1/internal/server"
+	"netsepio-gateway-v1.1/utils/load"
 	"netsepio-gateway-v1.1/utils/logwrapper"
 )
 
 // Initialize the app
 func Init() {
-	logrus.Println("Initializing the app...")
+
+	load.Logger.Sugar().Infoln("Initializing the app...")
+	// Initialize the logger
+	logwrapper.Init()
 	// test db connection
 	database.GetDb()
 	// Migrate the database
-	database.Migrate()
+	// database.Migrate()
 	// Initialize Redis
 	caching.InitRedis()
-	logwrapper.Init()
+
 	// Initialize the server
 	server.Init()
 
-	logrus.Println("App initialized successfully.")
+	load.Logger.Sugar().Infoln("App initialized successfully.")
 
 }

@@ -17,12 +17,13 @@ func ApplyRoutes(r *gin.RouterGroup) {
 	{
 		g.GET("", status)
 	}
-	k := load.Cfg.PASETO_PRIVATE_KEY
-	pvKey := ed25519.PrivateKey(k)
-	pubKey = "0x" + hex.EncodeToString(pvKey.Public().(ed25519.PublicKey))
 }
 
 func status(c *gin.Context) {
+
+	k := load.Cfg.PASETO_PRIVATE_KEY
+	pvKey := ed25519.PrivateKey(k)
+	pubKey = "0x" + hex.EncodeToString(pvKey.Public().(ed25519.PublicKey))
 
 	c.JSON(200, gin.H{
 		"status":    "alive",
