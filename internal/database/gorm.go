@@ -1,6 +1,8 @@
 package database
 
 import (
+	"fmt"
+	"log"
 	"strconv"
 	"strings"
 
@@ -10,7 +12,7 @@ import (
 	"netsepio-gateway-v1.1/utils/load"
 )
 
-var db *gorm.DB
+var DB *gorm.DB
 
 type DBout struct {
 	DB *gorm.DB
@@ -18,7 +20,7 @@ type DBout struct {
 
 // SetDB sets the database connection
 func SetDB(database *gorm.DB) {
-	db = database
+	DB = database
 }
 
 type Logger struct {
@@ -59,4 +61,39 @@ func (cfg ConfigWrapper) GetDB() (out DBout, err error) {
 	// Migrate the schema
 
 	return
+}
+
+func GetDb() *gorm.DB {
+
+	if DB != nil {
+		return DB
+	}
+	var (
+		host     = load.Cfg.DB_HOST
+		username = load.Cfg.DB_USERNAME
+		password = load.Cfg.DB_PASSWORD
+		dbname   = load.Cfg.DB_NAME
+		port     = load.Cfg.DB_PORT
+	)
+
+	dns := fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable port=%d",
+		host, username, password, dbname, port)
+
+	var err error
+	DB, err = gorm.Open(postgres.New(postgres.Config{
+		DSN: dns,
+	}))
+	if err != nil {
+		log.Fatal("failed to connect database", err)
+	}
+
+	sqlDb, err := DB.DB()
+	if err != nil {
+		log.Fatal("failed to ping database", err)
+	}
+	if err = sqlDb.Ping(); err != nil {
+		log.Fatal("failed to ping database", err)
+	}
+
+	return DB
 }

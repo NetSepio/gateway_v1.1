@@ -1,7 +1,6 @@
 package load
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/caarlos0/env/v6"
@@ -67,11 +66,13 @@ func init() {
 	// load env
 	if err := godotenv.Load(".env"); err != nil {
 		panic("Error loading .env file: " + err.Error())
+	} else {
+		println("Loaded .env file")
 	}
 	// parse environment variables into the Config struct
 	if err := env.Parse(&Cfg); err != nil {
 		panic("Error parsing env variables: " + err.Error())
+	} else {
+		println("Parsed env variables")
 	}
-
-	fmt.Printf("%+v\n", Cfg)
 }
